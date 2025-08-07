@@ -1,0 +1,344 @@
+/* 体のマッピング用スタイル */
+
+/* メインコンテナ */
+.mapping-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ヘッダーアクション */
+.header-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.nav-button, .action-button {
+    background-color: #1c4587;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.nav-button:hover, .action-button:hover {
+    background-color: #2c5aa0;
+}
+
+/* 体マップセクション */
+.body-map-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+}
+
+.map-instructions {
+    margin-bottom: 1rem;
+    color: #666;
+    font-style: italic;
+}
+
+.body-map-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.body-svg-container {
+    width: 100%;
+    max-width: 300px;
+    position: relative;
+}
+
+/* SVG スタイル */
+#bodyMap {
+    width: 100%;
+    height: auto;
+}
+
+#bodyMap ellipse, 
+#bodyMap rect, 
+#bodyMap path {
+    fill: #f5f5f5;
+    stroke: #333;
+    stroke-width: 2;
+    cursor: pointer;
+    transition: fill 0.2s;
+}
+
+#bodyMap ellipse:hover, 
+#bodyMap rect:hover, 
+#bodyMap path:hover {
+    fill: #e1f5fe;
+}
+
+#bodyMap .selected {
+    fill: #bbdefb !important;
+    stroke: #1976d2;
+    stroke-width: 3;
+}
+
+#bodyMap .mapped {
+    fill: #c8e6c9;
+}
+
+/* マップされたアイテム */
+.mapped-items {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.mapped-marker {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(76, 175, 80, 0.8);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mapped-marker:hover {
+    background-color: rgba(76, 175, 80, 1);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+
+/* 処置セクション */
+.treatments-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+}
+
+.mapping-form {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: bold;1
+    color: #555;
+}
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+#applyMapping {
+    background-color: #4caf50;
+    color: white;
+}
+
+#cancelMapping {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.remove-btn {
+    background-color: #f44336;
+    color: white;
+    margin-left: auto;
+}
+
+/* 新規処置フォーム */
+.new-treatment-form {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    border-left: 3px solid #2196f3;
+}
+
+/* マッピングリスト */
+.treatment-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+}
+
+.treatment-item {
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.treatment-item:hover {
+    background-color: #f5f7fa;
+}
+
+.treatment-item:last-child {
+    border-bottom: none;
+}
+
+.treatment-item-title {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.treatment-item-location {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.treatment-item-note {
+    font-size: 0.85rem;
+    color: #333;
+    margin-top: 0.3rem;
+    font-style: italic;
+}
+
+.empty-message {
+    color: #999;
+    font-style: italic;
+    padding: 1rem;
+    text-align: center;
+}
+
+/* グラフ接続セクション */
+.graph-connection {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #ddd;
+}
+
+#importFromGraph {
+    background-color: #ff9800;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+#importFromGraph:hover {
+    background-color: #f57c00;
+}
+
+/* インポートモーダル */
+.import-container {
+    margin-top: 1rem;
+}
+
+.import-list-container {
+    margin-bottom: 1rem;
+}
+
+.import-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.import-item {
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.import-item input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+.import-item-type {
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+    color: white;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+}
+
+.type-treatment {
+    background-color: #3498db;
+}
+
+.type-medication {
+    background-color: #2ecc71;
+}
+
+.type-observation {
+    background-color: #9b59b6;
+}
+
+.import-actions {
+    text-align: right;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .mapping-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .body-map-section {
+        margin-bottom: 1rem;
+    }
+}
+
+#addNewTreatment {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+}
+
+#addNewTreatment:hover {
+    background-color: #1976d2;
+}

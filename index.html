@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>看護知識グラフビジュアライザー</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>看護知識グラフビジュアライザー</h1>
+        <div class="user-settings">
+            <div class="user-role">
+                <label for="userRole">ユーザー役割:</label>
+                <select id="userRole">
+                    <option value="student">看護学生</option>
+                    <option value="nurse">看護師</option>
+                </select>
+            </div>
+            <div class="terminology-selector">
+                <label for="terminologySource">用語辞書:</label>
+                <select id="terminologySource">
+                    <option value="standard">標準看護用語</option>
+                    <option value="school">看護学校用語</option>
+                    <option value="hospital">病院用語</option>
+                    <option value="region">地域用語</option>
+                </select>
+            </div>
+            <div class="institution-selector">
+                <button id="institutionSelectBtn" class="institution-btn">所属機関を選択</button>
+                <span id="selectedInstitution" class="selected-institution">未選択</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="input-section">
+            <div class="image-upload">
+                <h2>画像をアップロード</h2>
+                <input type="file" id="imageUpload" accept="image/*">
+                <div id="preview"></div>
+                <div class="auto-detect-info">
+                    <p>画像をアップロードすると自動的にノードとエッジが抽出されます</p>
+                </div>
+            </div>
+            
+            <div class="node-edge-editor">
+                <h2>ノードとエッジの編集</h2>
+                <div class="editor-controls">
+                    <button id="addNode">ノードを追加</button>
+                    <button id="addEdge">エッジを追加</button>
+                    <button id="deleteSelected">選択を削除</button>
+                    <button id="saveGraph">保存</button>
+                    <button id="exportGraph">エクスポート</button>
+                    <button id="checkTerminology">用語チェック</button>
+                    <a href="body_mapping.html" class="action-button" id="goToBodyMapping">体のマッピングへ</a>
+                </div>
+                <div class="node-form hidden">
+                    <h3>ノード情報</h3>
+                    <label>
+                        ラベル:
+                        <input type="text" id="nodeLabel">
+                    </label>
+                    <label>
+                        タイプ:
+                        <select id="nodeType">
+                            <option value="symptom">症状</option>
+                            <option value="treatment">治療</option>
+                            <option value="medication">薬剤</option>
+                            <option value="observation">観察</option>
+                            <option value="patient">患者情報</option>
+                        </select>
+                    </label>
+                    <div class="form-actions">
+                        <button id="saveNode">保存</button>
+                        <button id="cancelNode">キャンセル</button>
+                    </div>
+                </div>
+                <div class="edge-form hidden">
+                    <h3>エッジ情報</h3>
+                    <label>
+                        始点ノード:
+                        <select id="edgeSource"></select>
+                    </label>
+                    <label>
+                        終点ノード:
+                        <select id="edgeTarget"></select>
+                    </label>
+                    <label>
+                        関係:
+                        <select id="edgeType">
+                            <option value="causes">原因となる</option>
+                            <option value="treats">治療する</option>
+                            <option value="observes">観察する</option>
+                            <option value="requires">必要とする</option>
+                            <option value="improves">改善する</option>
+                        </select>
+                    </label>
+                    <label>
+                        重み:
+                        <input type="range" id="edgeWeight" min="1" max="10" value="5">
+                        <span id="weightValue">5</span>
+                    </label>
+                    <div class="form-actions">
+                        <button id="saveEdge">保存</button>
+                        <button id="cancelEdge">キャンセル</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="visualization-section">
+            <h2>知識グラフ</h2>
+            <div id="graphContainer"></div>
+        </section>
+
+        <section class="feedback-section">
+            <h2>ナイチンゲールからのフィードバック</h2>
+            <div id="feedback" class="feedback-content">
+                <p class="empty-feedback">グラフを編集するとフィードバックが表示されます。</p>
+            </div>
+        </section>
+
+        <section class="terminology-section hidden" id="terminologySection">
+            <h2>用語標準化</h2>
+            <div class="terminology-content">
+                <div class="terminology-filter">
+                    <button id="switchToStandard" class="terminology-filter-btn">標準用語</button>
+                    <button id="switchToSchool" class="terminology-filter-btn">看護学校</button>
+                    <button id="switchToHospital" class="terminology-filter-btn">病院</button>
+                    <button id="switchToRegion" class="terminology-filter-btn">地域</button>
+                </div>
+                <div id="terminologySuggestions" class="suggestions-container"></div>
+                <div class="terminology-actions">
+                    <button id="applyAllSuggestions">すべて適用</button>
+                    <button id="closeTerminology">閉じる</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2023 看護知識グラフビジュアライザー</p>
+    </footer>
+
+    <!-- 検索モーダル -->
+    <div id="institutionSearchModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>所属機関を検索</h3>
+            <div class="institution-search-container">
+                <div class="search-type-tabs">
+                    <button id="hospitalTabBtn" class="tab-btn active">病院</button>
+                    <button id="schoolTabBtn" class="tab-btn">看護学校</button>
+                    <button id="regionTabBtn" class="tab-btn">自治体</button>
+                </div>
+                <div class="search-area">
+                    <input type="text" id="institutionSearchInput" placeholder="名称で検索..." class="search-input">
+                    <button id="searchBtn" class="search-btn">検索</button>
+                </div>
+                <div id="searchResults" class="search-results">
+                    <!-- 検索結果がここに表示されます -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用語ばらつき視覚化モーダル -->
+    <div id="terminologyCompareModal" class="modal hidden">
+        <div class="modal-content wide-modal">
+            <span class="close-modal">&times;</span>
+            <h3>用語ばらつき視覚化</h3>
+            <div class="comparison-container">
+                <div class="comparison-filters">
+                    <select id="compareBaseSelect">
+                        <option value="standard">標準用語と比較</option>
+                        <option value="selected">選択した機関と比較</option>
+                    </select>
+                    <button id="compareBtn">比較開始</button>
+                </div>
+                <div id="comparisonChart" class="chart-container">
+                    <!-- チャートが表示されます -->
+                </div>
+                <div id="comparisonLegend" class="chart-legend">
+                    <!-- 凡例がここに表示されます -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="graph.js"></script>
+    <script src="institution_data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

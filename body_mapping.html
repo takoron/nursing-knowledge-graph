@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>患者ケアマッピング</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="body_mapping.css">
+</head>
+<body>
+    <header>
+        <h1>患者ケアマッピング</h1>
+        <div class="header-actions">
+            <a href="index.html" class="nav-button">知識グラフに戻る</a>
+            <button id="saveMapping" class="action-button">マッピングを保存</button>
+        </div>
+    </header>
+
+    <main class="mapping-container">
+        <div class="body-map-section">
+            <h2>体のマッピング</h2>
+            <div class="map-instructions">体の部位をクリックして処置を追加してください</div>
+            <div class="body-map-container">
+                <div class="body-svg-container">
+                    <svg id="bodyMap" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 頭部 -->
+                        <ellipse id="head" cx="100" cy="40" rx="30" ry="35" data-name="頭部" />
+                        
+                        <!-- 胸部 -->
+                        <rect id="chest" x="70" y="80" width="60" height="60" rx="5" data-name="胸部" />
+                        
+                        <!-- 腹部 -->
+                        <rect id="abdomen" x="70" y="140" width="60" height="50" rx="5" data-name="腹部" />
+                        
+                        <!-- 左腕 -->
+                        <path id="leftArm" d="M70,85 L40,120 L35,170 L45,175 L55,130 L70,100" data-name="左腕" />
+                        
+                        <!-- 右腕 -->
+                        <path id="rightArm" d="M130,85 L160,120 L165,170 L155,175 L145,130 L130,100" data-name="右腕" />
+                        
+                        <!-- 左脚 -->
+                        <path id="leftLeg" d="M70,190 L65,280 L60,350 L80,350 L90,280 L95,190" data-name="左脚" />
+                        
+                        <!-- 右脚 -->
+                        <path id="rightLeg" d="M130,190 L135,280 L140,350 L120,350 L110,280 L105,190" data-name="右脚" />
+                    </svg>
+                    <div id="mappedItems" class="mapped-items"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="treatments-section">
+            <h2>処置内容</h2>
+            <div id="mappingForm" class="mapping-form hidden">
+                <h3 id="selectedBodyPart">選択部位: <span></span></h3>
+                
+                <div class="form-group">
+                    <label for="treatmentSelect">処置:</label>
+                    <select id="treatmentSelect">
+                        <option value="">処置を選択...</option>
+                        <!-- 処置オプションは動的に追加されます -->
+                    </select>
+                    <button id="addNewTreatment">新規追加</button>
+                </div>
+                
+                <div id="newTreatmentForm" class="new-treatment-form hidden">
+                    <div class="form-group">
+                        <label for="newTreatmentName">処置名:</label>
+                        <input type="text" id="newTreatmentName">
+                    </div>
+                    <div class="form-group">
+                        <label for="newTreatmentType">種類:</label>
+                        <select id="newTreatmentType">
+                            <option value="treatment">治療</option>
+                            <option value="medication">薬剤</option>
+                            <option value="observation">観察</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newTreatmentDesc">説明:</label>
+                        <textarea id="newTreatmentDesc"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="treatmentNote">備考:</label>
+                    <textarea id="treatmentNote"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button id="applyMapping">適用</button>
+                    <button id="cancelMapping">キャンセル</button>
+                    <button id="removeMappingBtn" class="remove-btn hidden">削除</button>
+                </div>
+            </div>
+            
+            <div class="mapped-treatment-list">
+                <h3>マッピングされた処置</h3>
+                <div id="treatmentList" class="treatment-list">
+                    <!-- マッピングされた処置のリストが表示されます -->
+                    <div class="empty-message">まだ処置がマッピングされていません</div>
+                </div>
+            </div>
+
+            <div class="graph-connection">
+                <h3>知識グラフとの連携</h3>
+                <p>知識グラフからインポートした処置と症状をマッピングできます</p>
+                <button id="importFromGraph">知識グラフからインポート</button>
+            </div>
+        </div>
+    </main>
+    
+    <div id="importModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>知識グラフから項目をインポート</h3>
+            <div class="import-container">
+                <div class="import-list-container">
+                    <h4>知識グラフの処置</h4>
+                    <div id="importTreatmentList" class="import-list">
+                        <!-- インポート可能な処置リスト -->
+                    </div>
+                </div>
+                <div class="import-actions">
+                    <button id="importSelected">選択項目をインポート</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="body_mapping.js"></script>
+</body>
+</html>
