@@ -31,5 +31,5 @@ MIT License
 
 ## 作者
 
-takoron
+takoron/mamitaso
 
